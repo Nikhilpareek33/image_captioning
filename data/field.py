@@ -12,7 +12,7 @@ import shutil
 from PIL import Image
 from timm.data import create_transform
 from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from timm.data.transforms import _pil_interp
+from timm.data.transforms import str_to_pil_interp
 from torchvision import transforms
 
 from .dataset import Dataset
@@ -154,14 +154,14 @@ def build_transform(is_train, config):
         if config.TESTCROP:
             size = int((256 / 224) * config.IMG_SIZE)
             t.append(
-                transforms.Resize(size, interpolation=_pil_interp(config.INTERPOLATION)),
+                transforms.Resize(size, interpolation=str_to_pil_interp(config.INTERPOLATION)),
                 # to maintain same ratio w.r.t. 224 images
             )
             t.append(transforms.CenterCrop(config.IMG_SIZE))
         else:
             t.append(
                 transforms.Resize((config.IMG_SIZE, config.IMG_SIZE),
-                                  interpolation=_pil_interp(config.INTERPOLATION))
+                                  interpolation=str_to_pil_interp(config.INTERPOLATION))
             )
 
     t.append(transforms.ToTensor())

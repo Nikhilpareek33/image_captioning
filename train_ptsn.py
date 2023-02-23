@@ -491,7 +491,7 @@ if __name__ == '__main__':
     parser.add_argument('--REPROB', type=float, default=0.25)
     parser.add_argument('--REMODE', type=str, default='pixel')
     parser.add_argument('--RECOUNT', type=int, default=1)
-    parser.add_argument('--num_gpus', type=int, default=4)
+    parser.add_argument('--num_gpus', type=int, default=1)
     parser.add_argument('--d_in', type=int, default=1024)
     parser.add_argument('--INTERPOLATION', type=str, default='bicubic')
     parser.add_argument('--TESTCROP', type=bool, default=True)
