@@ -1,8 +1,0 @@
-DataPath/coco_caption/IMAGE_COCO/test2014/
-DataPath/coco_caption/IMAGE_COCO/train2014/
-DataPath/coco_caption/IMAGE_COCO/val2014/
-DataPath/coco_caption/IMAGE_COCO/test2014.zip
-DataPath/coco_caption/IMAGE_COCO/train2014.zip
-DataPath/coco_caption/IMAGE_COCO/val2014.zip
-DataPath/coco_caption/annotations/
-DataPath/resume_model/
