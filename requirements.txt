@@ -1,0 +1,16 @@
+clip==0.2.0
+h5py==3.1.0
+lmdb==1.4.0
+nltk==3.6.7
+numpy==1.19.0
+Pillow==8.4.0
+pycocotools==2.0.6
+requests==2.27.1
+revtok==0.0.3
+scikit_learn
+six
+spacy
+timm
+torch==1.7.1
+torchvision
+tqdm
