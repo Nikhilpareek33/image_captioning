@@ -29,7 +29,7 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "4, 5, 6, 7"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 def evaluate_loss(model, dataloader, loss_fn, text_field, e, device):
 
@@ -180,11 +180,14 @@ def _generalConfig(rank: int, worldSize: int):
     random.seed(1234)
     torch.manual_seed(1234)
     np.random.seed(1234)
+    print(f'\n Rank_in_gc : {rank},  WorldSize_in_gc {worldSize}')
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", world_size=worldSize, rank=rank)
 
 
 def train(rank, worldSize, args):
+
+    print(f'\n Training Rank : {rank} ,  WorldSize : {worldSize}')
     _generalConfig(rank, worldSize)
 
     print('Rank{}: Transformer Training'.format(rank))
@@ -508,4 +511,6 @@ if __name__ == '__main__':
     worldSize = args.num_gpus
     _changeConfig(args, worldSize)
     print('\nDistribute config', args)
+    print('\n World Size : ', worldSize)
+    # mp.spawn(train, args = (worldSize, worldSize, args))
     mp.spawn(train, (worldSize, args), worldSize)
