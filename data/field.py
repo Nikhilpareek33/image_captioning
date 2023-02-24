@@ -263,10 +263,17 @@ class TextField(RawField):
         sources = []
         for arg in args:
             if isinstance(arg, Dataset):
+                for name, field in arg.fields.items() :
+                    print(f'name : {name}, field: {field}')
+                    if field is self :
+                        print(getattr(arg, name) )
+
                 sources += [getattr(arg, name) for name, field in arg.fields.items() if field is self]
             else:
                 sources.append(arg)
 
+        print(sources)
+        
         for data in sources:
             for x in data:
                 x = self.preprocess(x)
