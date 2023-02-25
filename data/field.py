@@ -240,7 +240,8 @@ class TextField(RawField):
 
         super(TextField, self).__init__(preprocessing, postprocessing)
 
-    def preprocess(self, x, is_train):
+    # removed is_train as param
+    def preprocess(self, x):
         if six.PY2 and isinstance(x, six.string_types) and not isinstance(x, six.text_type):
             x = six.text_type(x, encoding='utf-8')
         if self.lower:
@@ -261,19 +262,29 @@ class TextField(RawField):
     def build_vocab(self, *args, **kwargs):
         counter = Counter()
         sources = []
+
+        
+
         for arg in args:
             if isinstance(arg, Dataset):
-                for name, field in arg.fields.items() :
-                    print(f'name : {name}, field: {field}')
-                    if field is self :
-                        print(getattr(arg, name) )
 
-                sources += [getattr(arg, name) for name, field in arg.fields.items() if field is self]
+                # for name, field in arg.fields.items() :
+                    # print(f'name : {name} ,  field:{field}')
+                    # if field is self :
+                        # print(f'field is : {field}')
+                        # print(arg.text())
+
+                sources += [arg.text() for name, field in arg.fields.items() if field is self]
             else:
+                # print(f'arg: {arg}')
                 sources.append(arg)
 
-        print(sources)
-        
+        # print(f'Sources : {sources} ')
+
+        # for data in sources: 
+        #     print(type(data))
+        #     print(data)
+
         for data in sources:
             for x in data:
                 x = self.preprocess(x)
