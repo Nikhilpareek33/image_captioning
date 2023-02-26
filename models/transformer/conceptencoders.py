@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from models.containers import Module, ModuleList
 from models.transformer.attention import MultiHeadAttention
-from models.transformer.utils import PositionWiseFeedForward
+from models.transformer.utils import PositionWiseFeedForward 
 
 class DecoderLayer(Module):
     def __init__(self, d_model=512, d_k=64, d_v=64, h=8, d_ff=2048, dropout=.1, self_att_module=None,

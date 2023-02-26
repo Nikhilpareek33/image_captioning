@@ -173,7 +173,7 @@ def _changeConfig(config, worldSize):
 
 
 def _generalConfig(rank: int, worldSize: int):
-    os.environ["MASTER_ADDR"] = "localhost"
+    os.environ["MASTER_ADDR"] = "b833582b46ae"
     os.environ["MASTER_PORT"] = "61888"
     torch.autograd.set_detect_anomaly(False)
     torch.backends.cudnn.benchmark = True
@@ -188,7 +188,7 @@ def _generalConfig(rank: int, worldSize: int):
 def train(rank, worldSize, args):
 
     print(f'\n Training Rank : {rank} ,  WorldSize : {worldSize}')
-    _generalConfig(rank, worldSize)
+    # _generalConfig(rank, worldSize)
 
     print('Rank{}: Transformer Training'.format(rank))
     if rank == 0:
@@ -218,9 +218,9 @@ def train(rank, worldSize, args):
     torch.cuda.set_device(rank)
     model = Transformer(text_field.vocab.stoi['<bos>'], backbone, decoder, encoder)
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
-    model = torch.nn.parallel.DistributedDataParallel(model.to(rank), device_ids=[rank], output_device=rank, broadcast_buffers=False, find_unused_parameters=True)
+    # model = torch.nn.parallel.DistributedDataParallel(model.to(rank), device_ids=[rank], output_device=rank, broadcast_buffers=False, find_unused_parameters=True)
 
-
+    print("dommo!!!!!!!!")
     dict_dataset_train = train_dataset.image_dictionary({'image': image_field, 'text': RawField()})
     # ref_caps_train = list(train_dataset.text)
     ref_caps_train = train_dataset.text()
@@ -237,7 +237,8 @@ def train(rank, worldSize, args):
     '''
 
     def lambda_lr(s):
-        rank = dist.get_rank()
+        # rank = dist.get_rank()
+        rank = 0
         if rank == 0:
             print("s:", s)
         if s <= 3:
@@ -252,7 +253,7 @@ def train(rank, worldSize, args):
     
     def lambda_lr_rl(s):
         refine_epoch = args.refine_epoch_rl
-        rank = dist.get_rank()
+        rank = 0
         if rank == 0:
             print("rl_s:", s)
         if s <= refine_epoch:
@@ -317,15 +318,15 @@ def train(rank, worldSize, args):
 
     print("Rank{}: Training starts".format(rank))
     for e in range(start_epoch, start_epoch + 100):
-        trainSampler = DistributedSampler(train_dataset, worldSize, rank)
-        trainSampler.set_epoch(e)
-        dataloader_train = DataLoader(train_dataset, sampler=trainSampler, batch_size=args.batch_size, pin_memory=True, drop_last=False, num_workers=args.workers, persistent_workers=True)
+        # trainSampler = DistributedSampler(train_dataset, worldSize, rank)
+        # trainSampler.set_epoch(e)
+        dataloader_train = DataLoader(train_dataset, batch_size=args.batch_size, pin_memory=True, drop_last=False, num_workers=args.workers, persistent_workers=True)
 
-        dataloader_val = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers)
+        dataloader_val = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers)
 
-        dict_trainSampler = DistributedSampler(dict_dataset_train, worldSize, rank)
-        dict_trainSampler.set_epoch(e)
-        dict_dataloader_train = DataLoader(dict_dataset_train, sampler=dict_trainSampler, batch_size=args.batch_size // 5,  pin_memory=True, drop_last=False, num_workers=args.workers, persistent_workers=True)
+        # dict_trainSampler = DistributedSampler(dict_dataset_train, worldSize, rank)
+        # dict_trainSampler.set_epoch(e)
+        dict_dataloader_train = DataLoader(dict_dataset_train, batch_size=args.batch_size // 5,  pin_memory=True, drop_last=False, num_workers=args.workers, persistent_workers=True)
 
         dict_dataloader_val = DataLoader(dict_dataset_val, batch_size=args.batch_size // 5)
         dict_dataloader_test = DataLoader(dict_dataset_test, batch_size=args.batch_size // 5)
@@ -513,4 +514,9 @@ if __name__ == '__main__':
     print('\nDistribute config', args)
     print('\n World Size : ', worldSize)
     # mp.spawn(train, args = (worldSize, worldSize, args))
-    mp.spawn(train, (worldSize, args), worldSize)
+    # mp.spawn(train, (worldSize, args), worldSize)
+    train(worldSize-1, worldSize, args)
+
+
+
+
