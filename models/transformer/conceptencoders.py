@@ -45,7 +45,7 @@ class PAEncoder(nn.Module):
         self.concept_protos = []
         self.concept_protos.append(torch.load('./hyper_protos.pth')['hyper2k-800'])
         self.concept_protos.append(torch.load('./hyper_protos.pth')['hyper2k-800'])
-        self.concept_protos.append(torch.load('./hyper_protos.pth')['hyper2000'])
+        self.concept_protos.append(torch.load('./hyper_protos.pth')['hyper2k'])
 
     def forward(self, grid):
         """

@@ -49,9 +49,15 @@ class Dataset(object):
 
     def __getitem__(self, i):
         example = self.examples[i]
+
+        # print(f'exp : {example}')
         data = []
         for field_name, field in self.fields.items():
-            data.append(field.preprocess(getattr(example, field_name), self.is_train))
+            print(f'example : {getattr(example, field_name)}')
+            temp = getattr(example, field_name)
+            print(temp, self.is_train)
+            print('2')
+            data.append(field.preprocess(temp, self.is_train))
 
         if len(data) == 1:
             data = data[0]
