@@ -55,9 +55,8 @@ class Dataset(object):
         for field_name, field in self.fields.items():
             print(f'example : {getattr(example, field_name)}')
             temp = getattr(example, field_name)
-            print(temp, self.is_train)
-            print('2')
-            data.append(field.preprocess(temp, self.is_train))
+            # print('sadf:',field.preprocess(temp, self.is_train))
+            data.append(field.preprocess(temp,self.is_train))
 
         if len(data) == 1:
             data = data[0]

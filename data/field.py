@@ -240,8 +240,8 @@ class TextField(RawField):
 
         super(TextField, self).__init__(preprocessing, postprocessing)
 
-    # removed is_train as param
-    def preprocess(self, x):
+    # removed is_train as param -NIK
+    def preprocess(self, x, is_train):
         if six.PY2 and isinstance(x, six.string_types) and not isinstance(x, six.text_type):
             x = six.text_type(x, encoding='utf-8')
         if self.lower:

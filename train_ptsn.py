@@ -37,8 +37,11 @@ def evaluate_loss(model, dataloader, loss_fn, text_field, e, device):
     model.eval()
     running_loss = .0
     with tqdm(desc='Epoch %d - validation' % e, unit='it', total=len(dataloader), disable=device!=0) as pbar:
+        
         with torch.no_grad():
+            print('inside')
             for it, (detections, captions) in enumerate(dataloader):
+                print(detections, captions)
                 detections, captions = detections.to(device), captions.to(device)
                 out = model(mode='xe', images=detections, seq=captions)
                 captions = captions[:, 1:].contiguous()
@@ -90,7 +93,10 @@ def train_xe(model, dataloader, optim, text_field, scheduler, loss_fn, e, device
         print('Dec lr = ', optim.state_dict()['param_groups'][1]['lr'])
     running_loss = .0
     with tqdm(desc='Epoch %d - train' % e, unit='it', total=len(dataloader), disable=device!=0) as pbar:
+        print(f'Len of dataloader : {len(dataloader)}')
+        i = 0
         for it, (detections, captions) in enumerate(dataloader):
+            print(i)
             detections, captions = detections.to(device), captions.to(device)
             # attrs = captions_attrs[:, :, 1]
             out = model(mode='xe', images=detections, seq=captions)
@@ -109,7 +115,7 @@ def train_xe(model, dataloader, optim, text_field, scheduler, loss_fn, e, device
 
             pbar.set_postfix(loss=running_loss / (it + 1))
             pbar.update()
-
+            i += 1
             # scheduler.step()
 
     loss = running_loss / len(dataloader)
@@ -219,7 +225,8 @@ def train(rank, worldSize, args):
     model = Transformer(text_field.vocab.stoi['<bos>'], backbone, decoder, encoder)
     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     # model = torch.nn.parallel.DistributedDataParallel(model.to(rank), device_ids=[rank], output_device=rank, broadcast_buffers=False, find_unused_parameters=True)
-
+    model.to(rank)
+    
     print("dommo!!!!!!!!")
     dict_dataset_train = train_dataset.image_dictionary({'image': image_field, 'text': RawField()})
     # ref_caps_train = list(train_dataset.text)
@@ -331,6 +338,7 @@ def train(rank, worldSize, args):
         dict_dataloader_val = DataLoader(dict_dataset_val, batch_size=args.batch_size // 5)
         dict_dataloader_test = DataLoader(dict_dataset_test, batch_size=args.batch_size // 5)
         if not use_rl:
+            print(f'calling tarin xe')
             train_loss = train_xe(model, dataloader_train, optim, text_field, scheduler, loss_fn, e, rank)
             if rank == 0:
                 writer.add_scalar('data/train_loss', train_loss, e)
@@ -471,7 +479,7 @@ def train(rank, worldSize, args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Progressive Tree-Structured prototype Network')
     parser.add_argument('--exp_name', type=str, default='swintransformer_base_texthiproto2000-800')
-    parser.add_argument('--batch_size', type=int, default=50)
+    parser.add_argument('--batch_size', type=int, default=5)
     parser.add_argument('--workers', type=int, default=4)
     parser.add_argument('--m', type=int, default=40)
     parser.add_argument('--head', type=int, default=8)
@@ -520,3 +528,4 @@ if __name__ == '__main__':
 
 
 
+# 522418 missing number
