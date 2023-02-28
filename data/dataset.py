@@ -53,7 +53,7 @@ class Dataset(object):
         # print(f'exp : {example}')
         data = []
         for field_name, field in self.fields.items():
-            print(f'example : {getattr(example, field_name)}')
+            # print(f'example : {getattr(example, field_name)}')
             temp = getattr(example, field_name)
             # print('sadf:',field.preprocess(temp, self.is_train))
             data.append(field.preprocess(temp,self.is_train))
