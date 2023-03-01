@@ -39,9 +39,7 @@ def evaluate_loss(model, dataloader, loss_fn, text_field, e, device):
     with tqdm(desc='Epoch %d - validation' % e, unit='it', total=len(dataloader), disable=device!=0) as pbar:
         
         with torch.no_grad():
-            print('inside')
             for it, (detections, captions) in enumerate(dataloader):
-                print(detections, captions)
                 detections, captions = detections.to(device), captions.to(device)
                 out = model(mode='xe', images=detections, seq=captions)
                 captions = captions[:, 1:].contiguous()
@@ -93,10 +91,10 @@ def train_xe(model, dataloader, optim, text_field, scheduler, loss_fn, e, device
         print('Dec lr = ', optim.state_dict()['param_groups'][1]['lr'])
     running_loss = .0
     with tqdm(desc='Epoch %d - train' % e, unit='it', total=len(dataloader), disable=device!=0) as pbar:
-        print(f'Len of dataloader : {len(dataloader)}')
+        # print(f'Len of dataloader : {len(dataloader)}')
         i = 0
         for it, (detections, captions) in enumerate(dataloader):
-            print(i)
+            # print(i)
             detections, captions = detections.to(device), captions.to(device)
             # attrs = captions_attrs[:, :, 1]
             out = model(mode='xe', images=detections, seq=captions)
