@@ -477,7 +477,7 @@ def train(rank, worldSize, args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Progressive Tree-Structured prototype Network')
     parser.add_argument('--exp_name', type=str, default='swintransformer_base_texthiproto2000-800')
-    parser.add_argument('--batch_size', type=int, default=5)
+    parser.add_argument('--batch_size', type=int, default=32)
     parser.add_argument('--workers', type=int, default=4)
     parser.add_argument('--m', type=int, default=40)
     parser.add_argument('--head', type=int, default=8)

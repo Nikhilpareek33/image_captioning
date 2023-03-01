@@ -196,7 +196,8 @@ class PairedDataset(Dataset):
 
 
 class COCO(PairedDataset):
-    def __init__(self, image_field, text_field, img_root, ann_root, id_root=None, use_restval=True,
+    # use rest val was true - NIK
+    def __init__(self, image_field, text_field, img_root, ann_root, id_root=None, use_restval=False,
                  cut_validation=False):
         roots = {}
         roots['train'] = {
