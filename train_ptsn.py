@@ -92,7 +92,7 @@ def train_xe(model, dataloader, optim, text_field, scheduler, loss_fn, e, device
     running_loss = .0
     with tqdm(desc='Epoch %d - train' % e, unit='it', total=len(dataloader), disable=device!=0) as pbar:
         # print(f'Len of dataloader : {len(dataloader)}')
-        i = 0
+        # i = 0
         for it, (detections, captions) in enumerate(dataloader):
             # print(i)
             detections, captions = detections.to(device), captions.to(device)
@@ -113,7 +113,7 @@ def train_xe(model, dataloader, optim, text_field, scheduler, loss_fn, e, device
 
             pbar.set_postfix(loss=running_loss / (it + 1))
             pbar.update()
-            i += 1
+            # i += 1
             # scheduler.step()
 
     loss = running_loss / len(dataloader)
